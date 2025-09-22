@@ -57,6 +57,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        cf: {
+          newbie: "hsl(var(--cf-newbie))",
+          pupil: "hsl(var(--cf-pupil))",
+          specialist: "hsl(var(--cf-specialist))",
+          expert: "hsl(var(--cf-expert))",
+          "candidate-master": "hsl(var(--cf-candidate-master))",
+          master: "hsl(var(--cf-master))",
+          grandmaster: "hsl(var(--cf-grandmaster))",
+        },
+        chart: {
+          "1": "hsl(var(--chart-1))",
+          "2": "hsl(var(--chart-2))",
+          "3": "hsl(var(--chart-3))",
+          "4": "hsl(var(--chart-4))",
+          "5": "hsl(var(--chart-5))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
