@@ -4,9 +4,11 @@ import { UserProfile } from '@/components/UserProfile';
 import { RatingChart } from '@/components/RatingChart';
 import { ContestHistory } from '@/components/ContestHistory';
 import { ProblemStats } from '@/components/ProblemStats';
+import { AppSidebar } from '@/components/AppSidebar';
 import { codeforcesApi, CodeforcesUser, CodeforcesRatingChange, CodeforcesSubmission } from '@/services/codeforcesApi';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Code2, BarChart3 } from 'lucide-react';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 const Index = () => {
   const [user, setUser] = useState<CodeforcesUser | null>(null);
@@ -51,77 +53,103 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-primary p-2">
-                <Code2 className="h-6 w-6 text-primary-foreground" />
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        {user && <AppSidebar />}
+        
+        <div className="flex-1 flex flex-col">
+          {/* Header */}
+          <header className="sticky top-0 z-40 border-b border-border/40 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex items-center gap-4">
+                {user && <SidebarTrigger className="lg:hidden" />}
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="rounded-lg bg-gradient-to-br from-primary to-accent p-2 shadow-glow">
+                    <Code2 className="h-5 w-5 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      Codeforces Analytics
+                    </h1>
+                    <p className="text-sm text-muted-foreground hidden sm:block">
+                      Competitive Programming Dashboard
+                    </p>
+                  </div>
+                </div>
+                <div className="max-w-md w-full hidden md:block">
+                  <UserSearch onSearch={handleSearch} loading={loading} />
+                </div>
               </div>
-              <div>
-                <h1 className="text-3xl font-bold">Codeforces Analytics</h1>
-                <p className="text-muted-foreground">Competitive Programming Dashboard</p>
+              <div className="mt-4 md:hidden">
+                <UserSearch onSearch={handleSearch} loading={loading} />
               </div>
             </div>
-            <UserSearch onSearch={handleSearch} loading={loading} />
-          </div>
-        </div>
-      </header>
+          </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        {loading && (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <span className="ml-2 text-lg">Loading user data...</span>
-          </div>
-        )}
+          {/* Main Content */}
+          <main className="flex-1 container mx-auto px-4 py-8">
+            {loading && (
+              <div className="flex items-center justify-center py-12 animate-fade-in">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-lg">Loading user data...</span>
+              </div>
+            )}
 
-        {!user && !loading && (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="rounded-full bg-muted p-6 mb-4">
-              <BarChart3 className="h-12 w-12 text-muted-foreground" />
+            {!user && !loading && (
+              <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+                <div className="rounded-full bg-gradient-to-br from-primary/20 to-accent/20 p-8 mb-6 animate-scale-in">
+                  <BarChart3 className="h-16 w-16 text-primary" />
+                </div>
+                <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Welcome to Codeforces Analytics
+                </h2>
+                <p className="text-muted-foreground max-w-md text-lg">
+                  Enter a Codeforces handle above to view detailed analytics including rating history, 
+                  contest performance, and problem-solving statistics.
+                </p>
+              </div>
+            )}
+
+            {user && !loading && (
+              <div className="space-y-8 animate-fade-in">
+                {/* User Profile Section */}
+                <section id="overview">
+                  <UserProfile user={user} />
+                </section>
+
+                {/* Charts and Analytics */}
+                <div className="grid gap-6">
+                  {ratingHistory.length > 0 && (
+                    <section id="rating">
+                      <RatingChart ratingHistory={ratingHistory} />
+                    </section>
+                  )}
+                  
+                  {ratingHistory.length > 0 && (
+                    <section id="contests">
+                      <ContestHistory ratingHistory={ratingHistory} />
+                    </section>
+                  )}
+
+                  {submissions.length > 0 && (
+                    <section id="problems">
+                      <ProblemStats submissions={submissions} />
+                    </section>
+                  )}
+                </div>
+              </div>
+            )}
+          </main>
+
+          {/* Footer */}
+          <footer className="border-t border-border/40 bg-card/50 backdrop-blur mt-16">
+            <div className="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
+              <p>Built with React, TypeScript, Tailwind CSS, and Codeforces API</p>
             </div>
-            <h2 className="text-2xl font-semibold mb-2">Welcome to Codeforces Analytics</h2>
-            <p className="text-muted-foreground max-w-md">
-              Enter a Codeforces handle above to view detailed analytics including rating history, 
-              contest performance, and problem-solving statistics.
-            </p>
-          </div>
-        )}
-
-        {user && !loading && (
-          <div className="space-y-8">
-            {/* User Profile Section */}
-            <UserProfile user={user} />
-
-            {/* Charts and Analytics */}
-            <div className="grid gap-6">
-              {ratingHistory.length > 0 && (
-                <RatingChart ratingHistory={ratingHistory} />
-              )}
-              
-              {ratingHistory.length > 0 && (
-                <ContestHistory ratingHistory={ratingHistory} />
-              )}
-
-              {submissions.length > 0 && (
-                <ProblemStats submissions={submissions} />
-              )}
-            </div>
-          </div>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-card mt-16">
-        <div className="container mx-auto px-4 py-6 text-center text-muted-foreground">
-          <p>Built with React, TypeScript, and Codeforces API</p>
+          </footer>
         </div>
-      </footer>
-    </div>
+      </div>
+    </SidebarProvider>
   );
 };
 

@@ -34,50 +34,58 @@ export const ContestHistory: React.FC<ContestHistoryProps> = ({ ratingHistory })
   };
 
   return (
-    <Card className="col-span-4">
+    <Card className="col-span-4 hover:shadow-glow transition-shadow duration-300">
       <CardHeader>
         <CardTitle>Recent Contest History</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Contest</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-center">Rank</TableHead>
-              <TableHead className="text-center">Rating Change</TableHead>
-              <TableHead className="text-center">New Rating</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {recentContests.map((contest) => {
-              const ratingChange = contest.newRating - contest.oldRating;
-              return (
-                <TableRow key={contest.contestId}>
-                  <TableCell className="font-medium max-w-xs truncate">
-                    {contest.contestName}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {formatDate(contest.ratingUpdateTimeSeconds)}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Badge variant="outline">
-                      #{contest.rank}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <span className={getRatingChangeColor(ratingChange)}>
-                      {getRatingChange(contest.oldRating, contest.newRating)}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-center font-semibold">
-                    {contest.newRating}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="font-semibold">Contest</TableHead>
+                <TableHead className="font-semibold">Date</TableHead>
+                <TableHead className="text-center font-semibold">Rank</TableHead>
+                <TableHead className="text-center font-semibold">Rating Change</TableHead>
+                <TableHead className="text-center font-semibold">New Rating</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {recentContests.map((contest, index) => {
+                const ratingChange = contest.newRating - contest.oldRating;
+                return (
+                  <TableRow 
+                    key={contest.contestId}
+                    className="hover:bg-primary/5 transition-colors duration-200 animate-fade-in"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <TableCell className="font-medium max-w-xs truncate">
+                      {contest.contestName}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {formatDate(contest.ratingUpdateTimeSeconds)}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Badge variant="outline" className="hover:scale-110 transition-transform">
+                        #{contest.rank}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <span 
+                        className={`font-semibold text-base ${getRatingChangeColor(ratingChange)}`}
+                      >
+                        {getRatingChange(contest.oldRating, contest.newRating)}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-center font-bold text-lg">
+                      {contest.newRating}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );

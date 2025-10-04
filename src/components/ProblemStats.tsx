@@ -59,61 +59,97 @@ export const ProblemStats: React.FC<ProblemStatsProps> = ({ submissions }) => {
   const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      <Card>
+    <div className="grid gap-6 md:grid-cols-2">
+      {/* Enhanced Tag Distribution - Horizontal Bar Chart */}
+      <Card className="md:col-span-2 hover:shadow-glow transition-shadow duration-300">
         <CardHeader>
-          <CardTitle>Problems by Tag</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            Problems by Tag
+            <span className="text-sm font-normal text-muted-foreground">
+              (Top 10 most frequent)
+            </span>
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={tagData} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis type="number" className="text-xs fill-muted-foreground" />
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={tagData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+              <XAxis 
+                type="number" 
+                className="text-xs"
+                stroke="hsl(var(--muted-foreground))"
+              />
               <YAxis 
                 dataKey="tag" 
                 type="category" 
-                width={80} 
-                className="text-xs fill-muted-foreground"
+                width={120} 
+                className="text-xs"
+                stroke="hsl(var(--muted-foreground))"
               />
               <Tooltip 
+                cursor={{ fill: 'hsl(var(--primary) / 0.1)' }}
                 contentStyle={{ 
-                  backgroundColor: 'hsl(var(--background))', 
+                  backgroundColor: 'hsl(var(--popover))',
                   border: '1px solid hsl(var(--border))',
-                  borderRadius: '6px'
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px hsl(var(--primary) / 0.2)',
                 }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
               />
-              <Bar dataKey="count" fill="hsl(var(--chart-1))" radius={[0, 4, 4, 0]} />
+              <Bar 
+                dataKey="count" 
+                radius={[0, 8, 8, 0]}
+                animationDuration={1000}
+              >
+                {tagData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Difficulty Distribution - Enhanced Pie Chart */}
+      <Card className="hover:shadow-glow transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Problems by Difficulty</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={350}>
             <PieChart>
               <Pie
                 data={difficultyData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
-                label={({ name, value }) => `${name}: ${value}`}
-                outerRadius={80}
+                labelLine={true}
+                label={({ name, value, percent }) => 
+                  `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
+                }
+                outerRadius={100}
+                innerRadius={60}
                 fill="#8884d8"
                 dataKey="count"
+                animationDuration={1000}
               >
                 {difficultyData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={COLORS[index % COLORS.length]}
+                    stroke="hsl(var(--background))"
+                    strokeWidth={2}
+                  />
                 ))}
               </Pie>
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: 'hsl(var(--background))', 
+                  backgroundColor: 'hsl(var(--popover))',
                   border: '1px solid hsl(var(--border))',
-                  borderRadius: '6px'
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px hsl(var(--primary) / 0.2)',
                 }}
               />
             </PieChart>
@@ -121,26 +157,33 @@ export const ProblemStats: React.FC<ProblemStatsProps> = ({ submissions }) => {
         </CardContent>
       </Card>
 
-      <Card className="md:col-span-2">
+      {/* Summary Stats with Gradient Cards */}
+      <Card className="hover:shadow-glow transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Problem Solving Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{uniqueProblems.length}</div>
-              <p className="text-sm text-muted-foreground">Unique Problems Solved</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 hover:scale-105 transition-transform duration-200">
+              <div className="text-3xl font-bold text-primary mb-1">
+                {uniqueProblems.length}
+              </div>
+              <p className="text-sm text-muted-foreground">Unique Problems</p>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-accent">{acceptedSubmissions.length}</div>
-              <p className="text-sm text-muted-foreground">Accepted Submissions</p>
+            <div className="p-4 rounded-lg bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20 hover:scale-105 transition-transform duration-200">
+              <div className="text-3xl font-bold text-accent mb-1">
+                {acceptedSubmissions.length}
+              </div>
+              <p className="text-sm text-muted-foreground">Accepted</p>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-chart-3">{submissions.length}</div>
-              <p className="text-sm text-muted-foreground">Total Submissions</p>
+            <div className="p-4 rounded-lg bg-gradient-to-br from-chart-3/10 to-chart-3/5 border border-chart-3/20 hover:scale-105 transition-transform duration-200">
+              <div className="text-3xl font-bold" style={{ color: 'hsl(var(--chart-3))' }}>
+                {submissions.length}
+              </div>
+              <p className="text-sm text-muted-foreground">Total Attempts</p>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-chart-4">
+            <div className="p-4 rounded-lg bg-gradient-to-br from-chart-4/10 to-chart-4/5 border border-chart-4/20 hover:scale-105 transition-transform duration-200">
+              <div className="text-3xl font-bold" style={{ color: 'hsl(var(--chart-4))' }}>
                 {((acceptedSubmissions.length / submissions.length) * 100).toFixed(1)}%
               </div>
               <p className="text-sm text-muted-foreground">Success Rate</p>
