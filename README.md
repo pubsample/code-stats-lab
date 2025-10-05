@@ -38,7 +38,7 @@ Clone the repository and install dependencies:
 git clone <YOUR_GIT_URL>
 
 # Navigate to project directory
-cd codeforces-analytics
+cd code-stats-lab
 
 # Install dependencies
 npm install
