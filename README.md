@@ -22,10 +22,6 @@ A modern, responsive web application for analyzing Codeforces competitive progra
 - **API**: Codeforces API integration
 - **Theme**: next-themes for dark/light mode
 
-## Project URL
-
-**Lovable Project**: https://lovable.dev/projects/d86beb0a-825b-4786-a6c6-b5a73409f00e
-
 ## Getting Started
 
 ### Prerequisites
@@ -108,10 +104,9 @@ No API key required for basic usage.
 
 You can edit this project in multiple ways:
 
-1. **Lovable IDE**: Visit the [project page](https://lovable.dev/projects/d86beb0a-825b-4786-a6c6-b5a73409f00e)
-2. **Local IDE**: Clone and edit with VS Code, WebStorm, etc.
-3. **GitHub**: Edit files directly on GitHub
-4. **GitHub Codespaces**: Use cloud-based development environment
+1. **Local IDE**: Clone and edit with VS Code, WebStorm, etc.
+2. **GitHub**: Edit files directly on GitHub
+3. **GitHub Codespaces**: Use cloud-based development environment
 
 ## Design System
 
@@ -132,18 +127,6 @@ The project uses a comprehensive design system defined in `src/index.css`:
 
 ## Deployment
 
-### Deploy with Lovable
-
-1. Visit your [Lovable project](https://lovable.dev/projects/d86beb0a-825b-4786-a6c6-b5a73409f00e)
-2. Click Share → Publish
-3. Your app will be deployed automatically
-
-### Custom Domain
-
-Connect a custom domain via Project > Settings > Domains in Lovable.
-
-[Learn more about custom domains](https://docs.lovable.dev/features/custom-domain#custom-domain)
-
 ### Manual Deployment
 
 Build the project and deploy to any static hosting service:
@@ -163,8 +146,3 @@ This project is open source and available under the MIT License.
 - [Codeforces](https://codeforces.com/) for providing the public API
 - [shadcn/ui](https://ui.shadcn.com/) for beautiful UI components
 - [Recharts](https://recharts.org/) for data visualization
-- Built with [Lovable](https://lovable.dev/)
-
-## Support
-
-For issues, questions, or suggestions, please open an issue on GitHub or contact through the Lovable project page.
