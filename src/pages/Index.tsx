@@ -5,6 +5,7 @@ import { RatingChart } from '@/components/RatingChart';
 import { ContestHistory } from '@/components/ContestHistory';
 import { ProblemStats } from '@/components/ProblemStats';
 import { AppSidebar } from '@/components/AppSidebar';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { codeforcesApi, CodeforcesUser, CodeforcesRatingChange, CodeforcesSubmission } from '@/services/codeforcesApi';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Code2, BarChart3 } from 'lucide-react';
@@ -76,8 +77,11 @@ const Index = () => {
                     </p>
                   </div>
                 </div>
-                <div className="max-w-md w-full hidden md:block">
-                  <UserSearch onSearch={handleSearch} loading={loading} />
+                <div className="flex items-center gap-2">
+                  <ThemeToggle />
+                  <div className="max-w-md w-full hidden md:block">
+                    <UserSearch onSearch={handleSearch} loading={loading} />
+                  </div>
                 </div>
               </div>
               <div className="mt-4 md:hidden">
