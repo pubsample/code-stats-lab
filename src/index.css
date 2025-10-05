@@ -37,13 +37,15 @@ All colors MUST be HSL.
     --ring: 217 91% 60%;
 
     /* Custom competitive programming colors */
-    --cf-newbie: 128 53% 52%;
-    --cf-pupil: 142 86% 28%;
-    --cf-specialist: 180 100% 35%;
-    --cf-expert: 231 100% 70%;
-    --cf-candidate-master: 271 91% 65%;
-    --cf-master: 25 95% 53%;
-    --cf-grandmaster: 0 84% 60%;
+    --cf-newbie: 0 0% 50%;
+    --cf-pupil: 120 100% 25%;
+    --cf-specialist: 177 97% 33%;
+    --cf-expert: 240 100% 50%;
+    --cf-candidate-master: 300 100% 33%;
+    --cf-master: 33 100% 50%;
+    --cf-international-master: 0 100% 50%;
+    --cf-grandmaster: 0 100% 50%;
+    --cf-legendary-grandmaster: 340 57% 44%;
 
     /* Chart colors */
     --chart-1: 217 91% 60%;
