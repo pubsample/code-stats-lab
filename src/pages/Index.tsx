@@ -6,6 +6,7 @@ import { ContestHistory } from '@/components/ContestHistory';
 import { ProblemStats } from '@/components/ProblemStats';
 import { AppSidebar } from '@/components/AppSidebar';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { AuthButton } from '@/components/AuthButton';
 import { codeforcesApi, CodeforcesUser, CodeforcesRatingChange, CodeforcesSubmission } from '@/services/codeforcesApi';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Code2, BarChart3 } from 'lucide-react';
@@ -78,6 +79,7 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <AuthButton />
                   <ThemeToggle />
                   <div className="max-w-md w-full hidden md:block">
                     <UserSearch onSearch={handleSearch} loading={loading} />
