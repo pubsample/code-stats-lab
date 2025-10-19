@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { UserSearch } from '@/components/UserSearch';
 import { UserProfile } from '@/components/UserProfile';
 import { RatingChart } from '@/components/RatingChart';
 import { ContestHistory } from '@/components/ContestHistory';
 import { ProblemStats } from '@/components/ProblemStats';
+import { PerformanceScore } from '@/components/PerformanceScore';
 import { AppSidebar } from '@/components/AppSidebar';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { AuthButton } from '@/components/AuthButton';
@@ -11,6 +12,7 @@ import { codeforcesApi, CodeforcesUser, CodeforcesRatingChange, CodeforcesSubmis
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Code2, BarChart3 } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { UserMetrics } from '@/lib/performanceScore';
 
 const Index = () => {
   const [user, setUser] = useState<CodeforcesUser | null>(null);
@@ -53,6 +55,39 @@ const Index = () => {
       setLoading(false);
     }
   };
+
+  // Calculate performance metrics from user data
+  const performanceMetrics = useMemo((): UserMetrics | null => {
+    if (!user || !submissions.length) return null;
+
+    const acceptedSubmissions = submissions.filter(s => s.verdict === 'OK');
+    const uniqueProblems = new Set(acceptedSubmissions.map(s => `${s.problem.contestId}-${s.problem.index}`));
+    const uniqueTags = new Set(acceptedSubmissions.flatMap(s => s.problem.tags || []));
+    
+    // Calculate streak (simplified - just check recent activity)
+    const recentDays = 30;
+    const recentSubmissions = submissions.filter(s => 
+      s.creationTimeSeconds > Date.now() / 1000 - (recentDays * 24 * 60 * 60)
+    );
+    const streakDays = recentSubmissions.length > 0 ? Math.min(recentDays, Math.ceil(recentSubmissions.length / 5)) : 0;
+
+    return {
+      rating: user.rating || 0,
+      maxRating: 3500,
+      contestsParticipated: ratingHistory.length,
+      maxContests: 100,
+      streakDays,
+      maxStreak: 100,
+      upsolveCount: 0, // Not available in current API
+      maxUpsolve: 200,
+      totalProblems: uniqueProblems.size,
+      maxProblems: 1500,
+      topicsCovered: uniqueTags.size,
+      maxTopics: 40,
+      accuracy: submissions.length > 0 ? (acceptedSubmissions.length / submissions.length) * 100 : 0,
+      virtualPerformance: 50, // Not available in current API
+    };
+  }, [user, submissions, ratingHistory]);
 
   return (
     <SidebarProvider>
@@ -118,6 +153,13 @@ const Index = () => {
 
             {user && !loading && (
               <div className="space-y-8 animate-fade-in">
+                {/* Performance Score Section */}
+                {performanceMetrics && (
+                  <section id="performance-score">
+                    <PerformanceScore metrics={performanceMetrics} />
+                  </section>
+                )}
+
                 {/* User Profile Section */}
                 <section id="overview">
                   <UserProfile user={user} />
