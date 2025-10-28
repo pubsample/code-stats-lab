@@ -33,7 +33,7 @@ export interface LeetCodeSubmission {
 }
 
 class LeetCodeAPI {
-  private BASE_URL = 'https://leetcode.com/graphql';
+  private BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/leetcode-proxy`;
 
   async getUserProfile(username: string): Promise<{ user: LeetCodeUser; stats: LeetCodeStats }> {
     try {
@@ -64,7 +64,10 @@ class LeetCodeAPI {
       };
 
       const response = await axios.post(this.BASE_URL, query, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
       });
 
       if (response.data.errors) {
@@ -129,7 +132,10 @@ class LeetCodeAPI {
       };
 
       const response = await axios.post(this.BASE_URL, query, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
       });
 
       const contestData = response.data.data.userContestRanking;
@@ -168,7 +174,10 @@ class LeetCodeAPI {
       };
 
       const response = await axios.post(this.BASE_URL, query, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
       });
 
       return response.data.data.recentSubmissionList || [];
